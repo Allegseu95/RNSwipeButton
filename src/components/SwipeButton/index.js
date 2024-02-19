@@ -23,7 +23,7 @@ import {
   TITLE_COLOR,
 } from '../../constants';
 
-const SwipeButton = props => {
+const SwipeButton = (props) => {
   const [layoutWidth, setLayoutWidth] = useState(0);
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
   const [isUnmounting, setIsUnmounting] = useState(false);
@@ -33,7 +33,7 @@ const SwipeButton = props => {
    * Correct layout width will be received only after first render but we need it before render.
    * So render SwipeThumb only if layoutWidth > 0
    */
-  const onLayoutContainer = async e => {
+  const onLayoutContainer = async (e) => {
     if (isUnmounting || layoutWidth) {
       return;
     }
@@ -41,16 +41,19 @@ const SwipeButton = props => {
   };
 
   useEffect(() => {
-    const handleScreenReaderToggled = isEnabled => {
+    const handleScreenReaderToggled = (isEnabled) => {
       if (isUnmounting || screenReaderEnabled === isEnabled) {
         return;
       }
       setScreenReaderEnabled(isEnabled);
     };
     setIsUnmounting(false);
-    const subscription = AccessibilityInfo.addEventListener('change', handleScreenReaderToggled);
+    const subscription = AccessibilityInfo.addEventListener(
+      'change',
+      handleScreenReaderToggled,
+    );
 
-    AccessibilityInfo.isScreenReaderEnabled().then(isEnabled => {
+    AccessibilityInfo.isScreenReaderEnabled().then((isEnabled) => {
       if (isUnmounting) {
         return;
       }
@@ -59,7 +62,7 @@ const SwipeButton = props => {
 
     return () => {
       setIsUnmounting(true);
-      subscription.remove();
+      subscription?.remove();
     };
   }, [isUnmounting, screenReaderEnabled]);
 
